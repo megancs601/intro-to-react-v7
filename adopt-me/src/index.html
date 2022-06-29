@@ -15,6 +15,15 @@
     <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
     <script>
       // Your code is going to go here
+      const App = () => {
+        return React.createElement(
+          "div",
+          {},
+          React.createElement("h1", {id: "brand"}, "Adopt Me!")
+        )
+      };
+
+      ReactDOM.render(React.createElement(App), document.getElementById("root"));
     </script>
   </body>
   
