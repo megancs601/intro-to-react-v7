@@ -1,9 +1,16 @@
 {
   "extends": [
     "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended", //catches many bugs around accessibility that can accidentally arise using React
     "prettier" //most come last!
   ],
-  "plugins": [],
+  "rules": {
+    "react/prop-types": 0, //turned off bc not useful anymore
+    "react/react-in-jsx-scope": 0 //turned off bc you dont need to use import react anymore
+  },
+  "plugins": ["react", "import", "jsx-a11y"],
   "parserOptions": {
     "ecmaVersion": 2022,
     "sourceType": "module",
