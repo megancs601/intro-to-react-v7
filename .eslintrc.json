@@ -4,13 +4,14 @@
     "plugin:import/errors",
     "plugin:react/recommended",
     "plugin:jsx-a11y/recommended", //catches many bugs around accessibility that can accidentally arise using React
+    "plugin:react-hooks/recommended",
     "prettier" //most come last!
   ],
   "rules": {
     "react/prop-types": 0, //turned off bc not useful anymore
     "react/react-in-jsx-scope": 0 //turned off bc you dont need to use import react anymore
   },
-  "plugins": ["react", "import", "jsx-a11y"],
+  "plugins": ["react", "import", "jsx-a11y", "react-hooks"],
   "parserOptions": {
     "ecmaVersion": 2022,
     "sourceType": "module",
