@@ -13,7 +13,7 @@ export default function useBreedList(animal) {
     } else if (localCache[animal]) {
       setBreedList(localCache[animal]);
     } else {
-      requestBreedList;
+      requestBreedList();
     }
 
     async function requestBreedList() {
