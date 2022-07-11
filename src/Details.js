@@ -10,6 +10,20 @@ class Details extends Component {
     this.state = { loading: true };
   }
 
+  //get called after Details gets rendered to the DOM
+  //componentDidMount is essentially useEffect(()=> {}, [])
+  async componentDidMount() {
+    const res = await fetch(
+      `http://pets-v2.dev-apis.com/pets?id=${this.props.params.id}`
+    );
+
+    const json = await res.json();
+
+    //you can call setState for each of these, but its better to call setState once if possible
+    //this.setState(Object.assign({ loading: false }, json.pets[0]));
+    this.setState({ loading: false, ...json.pets[0] }); //spread operator
+  }
+
   //class components must have a render function
   render() {
     if (this.state.loading) {
@@ -35,4 +49,9 @@ class Details extends Component {
   }
 }
 
-export default Details;
+const WrappedDetails = () => {
+  const params = useParams();
+  return <Details params={params} />;
+};
+
+export default WrappedDetails;
