@@ -4,11 +4,7 @@ import { useParams } from "react-router-dom";
 class Details extends Component {
   //cant use hooks  with class components
 
-  constructor(props) {
-    super(props);
-
-    this.state = { loading: true };
-  }
+  state = { loading: true };
 
   //get called after Details gets rendered to the DOM
   //componentDidMount is essentially useEffect(()=> {}, [])
