@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { useParams } from "react-router-dom";
-import Carousel from "../Carousel";
+import Carousel from "./Carousel";
 
 class Details extends Component {
   //cant use hooks  with class components
