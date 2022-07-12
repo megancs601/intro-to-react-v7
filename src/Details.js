@@ -3,11 +3,12 @@ import { useParams } from "react-router-dom";
 import Carousel from "./Carousel";
 import ErrorBoundary from "./ErrorBoundary";
 import ThemeContext from "./ThemeContext";
+import Modal from "./Modal";
 
 class Details extends Component {
   //cant use hooks  with class components
 
-  state = { loading: true };
+  state = { loading: true, showModal: false };
 
   //get called after Details gets rendered to the DOM
   //componentDidMount is essentially useEffect(()=> {}, [])
@@ -23,6 +24,8 @@ class Details extends Component {
     this.setState({ loading: false, ...json.pets[0] }); //spread operator
   }
 
+  toggleModal = () => this.setState({ showModal: !this.state.showModal });
+
   //class components must have a render function
   render() {
     if (this.state.loading) {
@@ -32,7 +35,7 @@ class Details extends Component {
     //throw new Error("Crash Test");
 
     //destructuring
-    const { animal, breed, city, state, description, name, images } =
+    const { animal, breed, city, state, description, name, images, showModal } =
       this.state;
 
     return (
@@ -44,10 +47,22 @@ class Details extends Component {
           <h2>
             {animal} - {breed} - {city}, {state}
           </h2>
-          <button style={{ backgroundColor: this.props.theme }}>
+          <button
+            onClick={this.toggleModal}
+            style={{ backgroundColor: this.props.theme }}
+          >
             Adopt {name}
           </button>
           <p> {description}</p>
+          {showModal ? (
+            <Modal>
+              <h1>Would you like to adopt {name}?</h1>
+              <div className="buttons">
+                <a href="https://bit.ly/pet-adopt">Yes</a>
+                <button onClick={this.toggleModal}>No</button>
+              </div>
+            </Modal>
+          ) : null}
         </div>
       </div>
     );
