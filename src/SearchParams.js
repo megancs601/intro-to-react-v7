@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import useBreedList from "./useBreedList";
 import Results from "./Results";
 import ThemeContext from "./ThemeContext";
+import ReactPaginate from "react-paginate";
 
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
 
@@ -12,19 +13,34 @@ const SearchParams = () => {
   const [breeds] = useBreedList(animal);
   const [pets, setPets] = useState([]);
   const [theme, setTheme] = useContext(ThemeContext);
+  const [numOfResults, setNumOfResults] = useState(0);
+  const [resultsPerPage, setResultsPerPage] = useState(0);
+  const [page, setPage] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
 
   useEffect(() => {
     requestPets();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [resultsPerPage, page]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function requestPets() {
     const res = await fetch(
-      `http://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}`
+      `http://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}&page=${page}`
     );
     const json = await res.json();
 
     setPets(json.pets);
+
+    if (json.numberOfResults != 0) {
+      setNumOfResults(json.numberOfResults);
+      setResultsPerPage(json.endIndex - json.startIndex + 1);
+      setPageCount(Math.ceil(numOfResults / resultsPerPage));
+      console.log(json.endIndex, json.startIndex);
+    }
   }
+
+  const handlePageClick = (e) => {
+    setPage(e.selected);
+  };
 
   return (
     <div className="search-params">
@@ -97,6 +113,23 @@ const SearchParams = () => {
         <button style={{ backgroundColor: theme }}>Submit</button>
       </form>
       <Results pets={pets} />
+      <ReactPaginate
+        previousLabel="Previous"
+        nextLabel="Next"
+        pageClassName="page-item"
+        pageLinkClassName="page-link"
+        previousClassName="page-item"
+        previousLinkClassName="page-link"
+        nextClassName="page-item"
+        nextLinkClassName="page-link"
+        breakLabel="..."
+        breakClassName="page-item"
+        breakLinkClassName="page-link"
+        pageCount={pageCount}
+        onPageChange={handlePageClick}
+        containerClassName="pagination"
+        activeClassName="active"
+      />
     </div>
   );
 };
