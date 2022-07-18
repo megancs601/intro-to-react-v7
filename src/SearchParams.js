@@ -5,6 +5,7 @@ import ThemeContext from "./ThemeContext";
 import ReactPaginate from "react-paginate";
 
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
+const RESULTS_PER_PAGE = 10;
 
 const SearchParams = () => {
   const [location, setLocation] = useState("");
@@ -13,14 +14,12 @@ const SearchParams = () => {
   const [breeds] = useBreedList(animal);
   const [pets, setPets] = useState([]);
   const [theme, setTheme] = useContext(ThemeContext);
-  const [numOfResults, setNumOfResults] = useState(0);
-  const [resultsPerPage, setResultsPerPage] = useState(0);
   const [page, setPage] = useState(0);
   const [pageCount, setPageCount] = useState(0);
 
   useEffect(() => {
     requestPets();
-  }, [resultsPerPage, page]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function requestPets() {
     const res = await fetch(
@@ -29,13 +28,7 @@ const SearchParams = () => {
     const json = await res.json();
 
     setPets(json.pets);
-
-    if (json.numberOfResults != 0) {
-      setNumOfResults(json.numberOfResults);
-      setResultsPerPage(json.endIndex - json.startIndex + 1);
-      setPageCount(Math.ceil(numOfResults / resultsPerPage));
-      console.log(json.endIndex, json.startIndex);
-    }
+    setPageCount(Math.ceil(json.numberOfResults / RESULTS_PER_PAGE));
   }
 
   const handlePageClick = (e) => {
@@ -48,6 +41,7 @@ const SearchParams = () => {
         onSubmit={(e) => {
           e.preventDefault();
           requestPets();
+          setPage(0);
         }}
       >
         <label htmlFor="location">
@@ -112,24 +106,26 @@ const SearchParams = () => {
         </label>
         <button style={{ backgroundColor: theme }}>Submit</button>
       </form>
+      <div>
+        <ReactPaginate
+          previousLabel="Previous"
+          nextLabel="Next"
+          pageClassName="page-item"
+          pageLinkClassName="page-link"
+          previousClassName="page-item"
+          previousLinkClassName="page-link"
+          nextClassName="page-item"
+          nextLinkClassName="page-link"
+          breakLabel="..."
+          breakClassName="page-item"
+          breakLinkClassName="page-link"
+          pageCount={pageCount}
+          onPageChange={handlePageClick}
+          containerClassName="pagination"
+          activeClassName="active"
+        />
+      </div>
       <Results pets={pets} />
-      <ReactPaginate
-        previousLabel="Previous"
-        nextLabel="Next"
-        pageClassName="page-item"
-        pageLinkClassName="page-link"
-        previousClassName="page-item"
-        previousLinkClassName="page-link"
-        nextClassName="page-item"
-        nextLinkClassName="page-link"
-        breakLabel="..."
-        breakClassName="page-item"
-        breakLinkClassName="page-link"
-        pageCount={pageCount}
-        onPageChange={handlePageClick}
-        containerClassName="pagination"
-        activeClassName="active"
-      />
     </div>
   );
 };
