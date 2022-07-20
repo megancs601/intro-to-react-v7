@@ -2,10 +2,9 @@ import { useState, useEffect, useContext } from "react";
 import useBreedList from "./useBreedList";
 import Results from "./Results";
 import ThemeContext from "./ThemeContext";
-import ReactPaginate from "react-paginate";
+import PageNavigation from "./PageNavigation";
 
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
-const RESULTS_PER_PAGE = 10;
 
 const SearchParams = () => {
   const [location, setLocation] = useState("");
@@ -15,7 +14,7 @@ const SearchParams = () => {
   const [pets, setPets] = useState([]);
   const [theme, setTheme] = useContext(ThemeContext);
   const [page, setPage] = useState(0);
-  const [pageCount, setPageCount] = useState(0);
+  const [numberOfResults, setNumberOfResults] = useState(0);
 
   useEffect(() => {
     requestPets();
@@ -28,12 +27,8 @@ const SearchParams = () => {
     const json = await res.json();
 
     setPets(json.pets);
-    setPageCount(Math.ceil(json.numberOfResults / RESULTS_PER_PAGE));
+    setNumberOfResults(json.numberOfResults);
   }
-
-  const handlePageClick = (e) => {
-    setPage(e.selected);
-  };
 
   return (
     <div className="search-params">
@@ -106,25 +101,7 @@ const SearchParams = () => {
         </label>
         <button style={{ backgroundColor: theme }}>Submit</button>
       </form>
-      <div>
-        <ReactPaginate
-          previousLabel="Previous"
-          nextLabel="Next"
-          pageClassName="page-item"
-          pageLinkClassName="page-link"
-          previousClassName="page-item"
-          previousLinkClassName="page-link"
-          nextClassName="page-item"
-          nextLinkClassName="page-link"
-          breakLabel="..."
-          breakClassName="page-item"
-          breakLinkClassName="page-link"
-          pageCount={pageCount}
-          onPageChange={handlePageClick}
-          containerClassName="pagination"
-          activeClassName="active"
-        />
-      </div>
+      <PageNavigation setPage = {setPage} numberOfResults={numberOfResults} />
       <Results pets={pets} />
     </div>
   );
