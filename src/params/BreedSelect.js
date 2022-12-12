@@ -1,4 +1,3 @@
-import { useState } from "react";
 import useBreedList from "../useBreedList";
 
 export default function BreedSelect(props) {

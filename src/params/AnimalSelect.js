@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export default function AnimalSelect(props) {
   const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
   return (
