@@ -1,6 +1,18 @@
 # intro-to-react-v7
 
-Using these tutorials:
+### Install
 
-https://btholt.github.io/complete-intro-to-react-v7/lessons/welcome/intro
-https://frontendmasters.com/courses/complete-react-v7/app-component/
+```bash
+npm install
+```
+
+### Demo
+
+```bash
+npm install
+```
+
+### Resources
+
+- [Complete Intro to React v7 Webpage](https://btholt.github.io/complete-intro-to-react-v7/lessons/welcome/intro)
+- [Fontend Masters: Complete Intro to React v7](https://frontendmasters.com/courses/complete-react-v7)
