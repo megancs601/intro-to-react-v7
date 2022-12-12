@@ -1,16 +1,16 @@
 import { useState, useEffect, useContext } from "react";
-import useBreedList from "./useBreedList";
+
 import Results from "./Results";
 import ThemeContext from "./ThemeContext";
 import PageNavigation from "./PageNavigation";
-
-const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
+import BreedSelect from "./params/BreedSelect";
+import AnimalSelect from "./params/AnimalSelect";
 
 const SearchParams = () => {
   const [location, setLocation] = useState("");
   const [animal, setAnimal] = useState("");
   const [breed, setBreed] = useState("");
-  const [breeds] = useBreedList(animal);
+
   const [pets, setPets] = useState([]);
   const [theme, setTheme] = useContext(ThemeContext);
   const [page, setPage] = useState(0);
@@ -30,6 +30,15 @@ const SearchParams = () => {
     setNumberOfResults(json.numberOfResults);
   }
 
+  const selectAnimal = (e) => {
+    setAnimal(e.target.value);
+    setBreed("");
+  };
+
+  const selectBreed = (e) => {
+    setBreed(e.target.value);
+  };
+
   return (
     <div className="search-params">
       <form
@@ -48,44 +57,8 @@ const SearchParams = () => {
             onChange={(e) => setLocation(e.target.value)}
           />
         </label>
-        <label htmlFor="animal">
-          Animal
-          <select
-            id="animal"
-            value={animal}
-            onChange={(e) => {
-              setAnimal(e.target.value);
-              setBreed("");
-            }}
-            onBlur={(e) => {
-              setAnimal(e.target.value);
-              setBreed("");
-            }}
-          >
-            <option />
-            {ANIMALS.map((animal) => (
-              <option key={animal} value={animal}>
-                {animal}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label htmlFor="breed">
-          Breed
-          <select
-            id="breed"
-            value={breed}
-            onChange={(e) => setBreed(e.target.value)}
-            onBlur={(e) => setBreed(e.target.value)}
-          >
-            <option />
-            {breeds.map((allBreeds) => (
-              <option key={allBreeds} value={allBreeds}>
-                {allBreeds}
-              </option>
-            ))}
-          </select>
-        </label>
+        <AnimalSelect selectAnimal={selectAnimal} animal={animal} />
+        <BreedSelect animal={animal} selectBreed={selectBreed} breed={breed} />
         <label htmlFor="theme">
           Theme
           <select
@@ -101,7 +74,7 @@ const SearchParams = () => {
         </label>
         <button style={{ backgroundColor: theme }}>Submit</button>
       </form>
-      <PageNavigation setPage = {setPage} numberOfResults={numberOfResults} />
+      <PageNavigation setPage={setPage} numberOfResults={numberOfResults} />
       <Results pets={pets} />
     </div>
   );
