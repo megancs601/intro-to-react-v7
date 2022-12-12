@@ -1,18 +1,17 @@
-import { useState, useEffect, useContext } from "react";
-
+import { useState, useEffect } from "react";
 import Results from "./Results";
-import ThemeContext from "./ThemeContext";
 import PageNavigation from "./PageNavigation";
 import BreedSelect from "./params/BreedSelect";
 import AnimalSelect from "./params/AnimalSelect";
+import Location from "./params/Location";
+import Theme from "./Theme";
 
 const SearchParams = () => {
   const [location, setLocation] = useState("");
   const [animal, setAnimal] = useState("");
   const [breed, setBreed] = useState("");
-
   const [pets, setPets] = useState([]);
-  const [theme, setTheme] = useContext(ThemeContext);
+
   const [page, setPage] = useState(0);
   const [numberOfResults, setNumberOfResults] = useState(0);
 
@@ -39,40 +38,23 @@ const SearchParams = () => {
     setBreed(e.target.value);
   };
 
+  const changeLocation = (e) => {
+    setLocation(e.target.value);
+  };
+
+  const submitClicked = (e) => {
+    e.preventDefault();
+    requestPets();
+    setPage(0);
+  };
+
   return (
     <div className="search-params">
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          requestPets();
-          setPage(0);
-        }}
-      >
-        <label htmlFor="location">
-          Location
-          <input
-            id="location"
-            value={location}
-            placeholder="Location"
-            onChange={(e) => setLocation(e.target.value)}
-          />
-        </label>
+      <form onSubmit={submitClicked}>
+        <Location location={location} setLocation={changeLocation} />
         <AnimalSelect selectAnimal={selectAnimal} animal={animal} />
         <BreedSelect animal={animal} selectBreed={selectBreed} breed={breed} />
-        <label htmlFor="theme">
-          Theme
-          <select
-            value={theme}
-            onChange={(e) => setTheme(e.target.value)}
-            onBlur={(e) => setTheme(e.target.value)}
-          >
-            <option value="peru">Peru</option>
-            <option value="darkblue">Dark Blue</option>
-            <option value="chartreuse">Chartreuse</option>
-            <option value="mediumorchid">Medium Orchid</option>
-          </select>
-        </label>
-        <button style={{ backgroundColor: theme }}>Submit</button>
+        <Theme />
       </form>
       <PageNavigation setPage={setPage} numberOfResults={numberOfResults} />
       <Results pets={pets} />
