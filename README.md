@@ -9,7 +9,7 @@ npm install
 ### Demo
 
 ```bash
-npm install
+npm run dev
 ```
 
 ### Resources
